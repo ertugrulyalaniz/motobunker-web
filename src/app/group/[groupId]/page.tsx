@@ -195,12 +195,13 @@ export default function GroupPage({
         {/* Sidebar - Slide-out drawer on mobile, always visible on desktop */}
         <aside
           className={`
-            relative md:relative inset-y-0 left-0 z-40
+             md:relative inset-y-0 left-0 z-40
             w-72 md:w-80 flex-shrink-0
             bg-background border-r border-border
             overflow-y-auto p-4 space-y-4
             transform transition-transform duration-200 ease-in-out
             ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+            ${isSidebarOpen ? "relative" : "fixed"}
             pt-14 md:pt-4
           `}
         >
