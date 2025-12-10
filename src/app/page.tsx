@@ -1,63 +1,106 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { UI_STRINGS } from "@/lib/utils/constants";
+
+export default function HomePage() {
+  const [inviteCode, setInviteCode] = useState("");
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="px-4 py-3 border-b border-border">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-base font-semibold text-foreground">
+              {UI_STRINGS.APP_TITLE}
+            </h1>
+            <p className="text-xs text-muted">
+              {UI_STRINGS.APP_SUBTITLE}
+            </p>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-md space-y-6">
+          {/* How it works */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{UI_STRINGS.HOW_IT_WORKS}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p>1. {UI_STRINGS.INSTRUCTION_1}</p>
+              <p>2. {UI_STRINGS.INSTRUCTION_2}</p>
+              <p>3. {UI_STRINGS.INSTRUCTION_3}</p>
+            </CardContent>
+          </Card>
+
+          {/* Create Group */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{UI_STRINGS.ROLE_LEADER}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                Yeni bir sürüş grubu oluşturun ve diğer sürücüleri davet edin.
+              </p>
+              <Link href="/create">
+                <Button size="lg" className="w-full">
+                  {UI_STRINGS.CREATE_GROUP}
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+          {/* Join Group */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{UI_STRINGS.ROLE_RIDER}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                Davet kodunu girerek mevcut bir gruba katılın.
+              </p>
+              <form
+                className="space-y-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (inviteCode.trim()) {
+                    window.location.href = `/join/${inviteCode.toUpperCase().trim()}`;
+                  }
+                }}
+              >
+                <Input
+                  label={UI_STRINGS.INVITE_CODE_LABEL}
+                  placeholder={UI_STRINGS.INVITE_CODE_PLACEHOLDER}
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                  maxLength={6}
+                  className="text-center tracking-widest"
+                />
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  size="lg"
+                  className="w-full"
+                  disabled={inviteCode.length < 6}
+                >
+                  {UI_STRINGS.JOIN_GROUP}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Privacy note */}
+          <p className="text-center text-xs text-muted">
+            Konum verileriniz sunucuda saklanmaz. Sadece gruptaki diğer cihazlarla doğrudan paylaşılır.
+          </p>
         </div>
       </main>
     </div>
