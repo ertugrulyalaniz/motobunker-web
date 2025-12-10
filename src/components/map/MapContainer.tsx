@@ -28,8 +28,8 @@ function createMarkerIcon(color: string, label: string, isMe: boolean = false): 
       <div style="
         background: ${color};
         color: white;
-        padding: 6px 12px;
-        border-radius: 20px;
+        padding: 4px ;
+        border-radius: 32px;
         font-size: 13px;
         font-weight: 600;
         white-space: nowrap;
@@ -37,8 +37,11 @@ function createMarkerIcon(color: string, label: string, isMe: boolean = false): 
         border: 2px solid rgba(255,255,255,0.9);
         width: fit-content;
         backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
         ${isMe ? 'animation: pulse 2s infinite;' : ''}
-      ">${label}</div>
+      " id="map-marker-label"
+      >${label}</div>
       <style>
         @keyframes pulse {
           0%, 100% { transform: scale(1); }

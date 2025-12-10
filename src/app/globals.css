@@ -65,3 +65,31 @@ body {
 .leaflet-container {
   background: var(--background) !important;
 }
+
+#map-marker-label:after {
+    content: "";
+    background-color: inherit;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 24px;
+    padding: 10px;
+    display: inline-block;
+    float: right;
+    margin-right: -3px;
+    margin-bottom: -16px;
+}
+#map-marker-label:before {
+    content: "";
+    background-color: #fff;
+    background-image: url(/helmet.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 10px;
+    display: inline-block;
+    margin-right: 10px;
+}
