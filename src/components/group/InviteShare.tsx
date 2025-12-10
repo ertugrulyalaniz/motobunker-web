@@ -68,7 +68,7 @@ export function InviteShare({ inviteCode }: InviteShareProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Mobile: Stack vertically, Desktop: Side by side */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+        <div className="flex flex-col items-center sm:items-start gap-4">
           {/* QR Code - Centered on mobile, right side on desktop */}
           <div className="flex-shrink-0 order-first sm:order-last">
             <p className="text-xs text-muted mb-1 text-center">QR Kod</p>
