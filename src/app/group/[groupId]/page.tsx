@@ -184,7 +184,7 @@ export default function GroupPage({
 
       {/* Main content */}
       <main className="flex-1 flex overflow-hidden relative">
-        {/* Mobile overlay */}
+        {/* Mobile overlay - only shown when sidebar is open on mobile */}
         {isSidebarOpen && (
           <div
             className="md:hidden fixed inset-0 bg-black/50 z-30"
@@ -192,7 +192,7 @@ export default function GroupPage({
           />
         )}
 
-        {/* Sidebar - Slide-out on mobile, fixed on desktop */}
+        {/* Sidebar - Slide-out drawer on mobile, always visible on desktop */}
         <aside
           className={`
             fixed md:relative inset-y-0 left-0 z-40
@@ -200,11 +200,11 @@ export default function GroupPage({
             bg-background border-r border-border
             overflow-y-auto p-4 space-y-4
             transform transition-transform duration-200 ease-in-out
-            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-            pt-16 md:pt-4
+            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
+            pt-14 md:pt-4
           `}
         >
-          {/* Close button (mobile) */}
+          {/* Close button (mobile only) */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="md:hidden absolute top-3 right-3 p-2 text-muted hover:text-foreground"
@@ -247,7 +247,6 @@ export default function GroupPage({
             </div>
           )}
         </aside>
-
         {/* Map - Full screen on mobile */}
         <section className="flex-1 relative">
           <Map

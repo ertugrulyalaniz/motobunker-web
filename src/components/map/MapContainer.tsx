@@ -20,23 +20,31 @@ interface MapContainerProps {
   className?: string;
 }
 
-// Custom marker icons
-function createMarkerIcon(color: string, label: string): L.DivIcon {
+// Custom marker icons - modern, soft style
+function createMarkerIcon(color: string, label: string, isMe: boolean = false): L.DivIcon {
   return L.divIcon({
     className: "custom-marker",
     html: `
       <div style="
         background: ${color};
         color: white;
-        padding: 4px 8px;
-        border-radius: 16px;
-        font-size: 12px;
-        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
         white-space: nowrap;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        border: 2px solid white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border: 2px solid rgba(255,255,255,0.9);
         width: fit-content;
+        backdrop-filter: blur(4px);
+        ${isMe ? 'animation: pulse 2s infinite;' : ''}
       ">${label}</div>
+      <style>
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+      </style>
     `,
     iconSize: [0, 0],
     iconAnchor: [0, 0],
@@ -63,9 +71,11 @@ export function MapContainer({
       DEFAULT_MAP_ZOOM
     );
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap katkıcıları",
+    // CartoDB Positron - clean, soft, modern map style
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 20,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: "abcd",
     }).addTo(mapRef.current);
 
     return () => {
@@ -80,7 +90,8 @@ export function MapContainer({
   useEffect(() => {
     if (!mapRef.current || !myLocation) return;
 
-    const icon = createMarkerIcon("#2563eb", `${myNickname} (Sen)`);
+    // Soft blue for self marker
+    const icon = createMarkerIcon("#3b82f6", `${myNickname} (Sen)`, true);
 
     if (!selfMarkerRef.current) {
       selfMarkerRef.current = L.marker([myLocation.lat, myLocation.lng], {
@@ -102,7 +113,8 @@ export function MapContainer({
 
     // Update existing markers and add new ones
     riderLocations.forEach((location, peerId) => {
-      const icon = createMarkerIcon("#22c55e", location.nickname);
+      // Soft teal for other riders
+      const icon = createMarkerIcon("#14b8a6", location.nickname);
 
       if (riderMarkersRef.current.has(peerId)) {
         const marker = riderMarkersRef.current.get(peerId)!;
