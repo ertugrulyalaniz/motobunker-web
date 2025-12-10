@@ -47,14 +47,33 @@ export function useWebRTC({
   }, []);
 
   const handleLocationReceived = useCallback((location: RiderLocation, sourcePeerId: string) => {
+    console.log("[WebRTC] Location received from:", sourcePeerId, "peerId in msg:", location.peerId);
+
     setRiderLocations((prev) => {
       const next = new Map(prev);
       next.set(location.peerId, location);
       return next;
     });
 
-    // If leader, relay to other peers
+    // For riders: if we receive a relayed location (peerId != sourcePeerId),
+    // add that rider to our riders list so they appear in the UI
+    if (role === "rider" && location.peerId !== sourcePeerId) {
+      // This is a relayed location from another rider via the leader
+      if (!ridersInfoRef.current.has(location.peerId)) {
+        ridersInfoRef.current.set(location.peerId, {
+          peerId: location.peerId,
+          nickname: location.nickname,
+          isLeader: false,
+          isConnected: true,
+        });
+        updateRiders();
+      }
+    }
+
+    // If leader, relay to ALL other peers (hub-spoke relay)
     if (role === "leader") {
+      console.log("[WebRTC] Leader relaying location from", location.peerId, "to other peers");
+
       const msg = {
         id: location.peerId,
         nickname: location.nickname,
@@ -65,12 +84,14 @@ export function useWebRTC({
       };
 
       peersRef.current.forEach((peer, remotePeerId) => {
+        // Don't send back to the original source
         if (remotePeerId !== sourcePeerId && peer.isDataChannelOpen) {
+          console.log("[WebRTC] Relaying to:", remotePeerId);
           peer.sendLocation(msg);
         }
       });
     }
-  }, [role]);
+  }, [role, updateRiders]);
 
   const createPeerConnection = useCallback(
     (remotePeerId: string, remoteNickname: string): PeerConnectionManager => {
