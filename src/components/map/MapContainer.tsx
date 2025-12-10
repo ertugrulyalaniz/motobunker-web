@@ -35,6 +35,7 @@ function createMarkerIcon(color: string, label: string): L.DivIcon {
         white-space: nowrap;
         box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         border: 2px solid white;
+        width: fit-content;
       ">${label}</div>
     `,
     iconSize: [0, 0],

@@ -67,9 +67,18 @@ export function InviteShare({ inviteCode }: InviteShareProps) {
         <CardTitle>Sürücüleri Davet Et</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-start gap-4">
-          <div className="flex-1 space-y-3">
-            <div>
+        {/* Mobile: Stack vertically, Desktop: Side by side */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          {/* QR Code - Centered on mobile, right side on desktop */}
+          <div className="flex-shrink-0 order-first sm:order-last">
+            <p className="text-xs text-muted mb-1 text-center">QR Kod</p>
+            <div className="rounded-lg border border-border p-2 bg-background">
+              <canvas ref={canvasRef} />
+            </div>
+          </div>
+
+          <div className="flex-1 space-y-3 w-full">
+            <div className="text-center sm:text-left">
               <p className="text-xs text-muted mb-1">Davet Kodu</p>
               <p className="text-2xl font-mono font-bold tracking-widest text-foreground">
                 {inviteCode}
@@ -89,7 +98,7 @@ export function InviteShare({ inviteCode }: InviteShareProps) {
                   size="sm"
                   onClick={handleCopy}
                 >
-                  {copied ? "Kopyalandı!" : "Kopyala"}
+                  {copied ? "✓" : "Kopyala"}
                 </Button>
               </div>
             </div>
@@ -98,16 +107,9 @@ export function InviteShare({ inviteCode }: InviteShareProps) {
               Davet Paylaş
             </Button>
           </div>
-
-          <div className="flex-shrink-0">
-            <p className="text-xs text-muted mb-1 text-center">QR Kod</p>
-            <div className="rounded-lg border border-border p-2 bg-background">
-              <canvas ref={canvasRef} />
-            </div>
-          </div>
         </div>
 
-        <p className="text-xs text-muted">
+        <p className="text-xs text-muted text-center sm:text-left">
           Sürücüler bu linki açtığında veya QR kodu tarattığında grubunuza katılabilirler.
         </p>
       </CardContent>
